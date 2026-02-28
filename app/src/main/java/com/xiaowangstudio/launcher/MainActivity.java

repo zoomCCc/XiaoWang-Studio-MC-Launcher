@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,34 +14,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 找到各个按钮
+        // 启动时自动创建 模组文件夹 和 光影文件夹
+        createModsAndShaderFolders();
+
+        // 找到按钮
         Button btnStartGame = findViewById(R.id.btn_start_game);
         Button btnDownloadVersion = findViewById(R.id.btn_download_version);
         Button btnAiDiagnosis = findViewById(R.id.btn_ai_diagnosis);
         Button btnSettings = findViewById(R.id.btn_settings);
 
-        // 启动游戏点击事件
+        // 启动游戏
         btnStartGame.setOnClickListener(v -> {
             Toast.makeText(this, "正在启动我的世界...", Toast.LENGTH_SHORT).show();
-            // 这里可以后续添加启动游戏的逻辑
         });
 
-        // 下载版本点击事件
+        // 下载版本
         btnDownloadVersion.setOnClickListener(v -> {
             Toast.makeText(this, "打开版本下载界面", Toast.LENGTH_SHORT).show();
-            // 这里可以后续添加下载逻辑
         });
 
-        // AI诊断点击事件
+        // AI诊断
         btnAiDiagnosis.setOnClickListener(v -> {
-            Toast.makeText(this, "正在进行AI诊断...", Toast.LENGTH_SHORT).show();
-            // 这里可以后续添加模组/光影检测逻辑
+            Toast.makeText(this, "正在检测模组与光影...", Toast.LENGTH_SHORT).show();
         });
 
-        // 设置点击事件
+        // 设置
         btnSettings.setOnClickListener(v -> {
             Toast.makeText(this, "打开设置界面", Toast.LENGTH_SHORT).show();
-            // 这里可以后续添加设置界面跳转逻辑
         });
+    }
+
+    // 自动创建模组和光影文件夹
+    private void createModsAndShaderFolders() {
+        File modsFolder = new File(getExternalFilesDir(null), "mods");
+        File shaderFolder = new File(getExternalFilesDir(null), "shaderpacks");
+
+        if (!modsFolder.exists()) {
+            modsFolder.mkdirs();
+        }
+        if (!shaderFolder.exists()) {
+            shaderFolder.mkdirs();
+        }
     }
 }
