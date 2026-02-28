@@ -1,85 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+package com.xiaowangstudio.launcher;
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="小王工作室MC启动器"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:layout_marginBottom="24dp"/>
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.io.File;
 
-    <Button
-        android:id="@+id/btn_start_game"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="启动游戏"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
+public class MainActivity extends AppCompatActivity {
 
-    <Button
-        android:id="@+id/btn_download_version"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="下载版本"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
+    private TextView console;
 
-    <Button
-        android:id="@+id/btn_ai_diagnosis"
-        android:text="AI诊断模组与光影"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    <Button
-        android:id="@+id/btn_settings"
-        android:text="设置"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp"/>
+        console = findViewById(R.id.console);
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="控制台"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
+        createModsAndShaderFolders();
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#111111"
-        android:padding="8dp"
-        android:layout_marginVertical="8dp">
+        Button btnStartGame = findViewById(R.id.btn_start_game);
+        Button btnDownloadVersion = findViewById(R.id.btn_download_version);
+        Button btnAiDiagnosis = findViewById(R.id.btn_ai_diagnosis);
+        Button btnSettings = findViewById(R.id.btn_settings);
 
-        <TextView
-            android:id="@+id/console"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#00FF00"
-            android:textSize="12sp"/>
-    </ScrollView>
+        btnStartGame.setOnClickListener(v -> {
+            log("正在启动我的世界...");
+            Toast.makeText(this, "启动中", Toast.LENGTH_SHORT).show();
+        });
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CCCCCC"/>
+        btnDownloadVersion.setOnClickListener(v -> {
+            log("打开版本下载界面");
+        });
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="小王工作室 © 2026"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_marginTop="8dp"/>
+        btnAiDiagnosis.setOnClickListener(v -> {
+            log("正在扫描模组与光影...");
+        });
 
-</LinearLayout>
+        btnSettings.setOnClickListener(v -> {
+            log("打开设置界面");
+        });
+
+        log("小王工作室MC启动器 启动成功");
+    }
+
+    private void log(String text) {
+        runOnUiThread(() -> {
+            console.append(text + "\n");
+        });
+    }
+
+    private void createModsAndShaderFolders() {
+        File modsFolder = new File(getExternalFilesDir(null), "mods");
+        File shaderFolder = new File(getExternalFilesDir(null), "shaderpacks");
+
+        if (!modsFolder.exists()) {
+            modsFolder.mkdirs();
+            log("mods 文件夹已创建");
+        }
+        if (!shaderFolder.exists()) {
+            shaderFolder.mkdirs();
+            log("shaderpacks 文件夹已创建");
+        }
+    }
+}
